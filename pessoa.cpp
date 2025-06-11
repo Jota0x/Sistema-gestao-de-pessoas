@@ -1,16 +1,23 @@
 #include <iostream>
 #include <fstream>
-using namespace std;
-
 #include "pessoa.hpp"
 #include "data.hpp"
+using namespace std;
 
-string getNome(string nome)
+
+extern const int MAX; // Constante global: tamanho físico do arranjo de pessoas
+extern int TAM;
+
+
+
+
+
+string Pessoa::getNome(string nome)
 {
     return nome;
 }
 
-Data getidade(int ano)
+Data Pessoa::getIdade(int ano)
 {
     int idade = 0;
 
@@ -19,28 +26,25 @@ Data getidade(int ano)
     return idade;
 }
 
-string getCpf(string cpf)
+string Pessoa::getCpf(string cpf)
 {
     return cpf;
 }
 
-void leiaNome(string nome)
+void Pessoa::leiaPessoa(string nome)
 {
     cout << "Nome: " << endl;
     cin >> nome;
 }
 
-void escrevaNome(string nome)
+void Pessoa::escreverPessoa(string nome, Data nascimento, string cpf)
 {
-    cout << "Nome:" << nome << endl;
+    cout << "Nome: " << nome << " | Data nascimento: " << "|";
+    nascimento.escreveData(nascimento.getDia(), nascimento.getMes(), nascimento.getAno());
+    cout << " | CPF: " << cpf << endl;
 }
 
-void escrevaPessoa(string nome, int ano)
-{
-    cout << "Nome: " << nome << " | idade: " << (2025 - ano) << " | " << endl;
-}
-
-void cadastrarPessoa()
+void Pessoa::cadastrarPessoa()
 {
     string nome, cpf;
     int dia, mes, ano;
@@ -64,6 +68,11 @@ void cadastrarPessoa()
         file << nome << ";" << cpf << ";" << data << endl;
         file.close();
         cout << "Cadastro salvo com sucesso!" << endl;
+        TAM++;
+    }
+    else if(TAM >= MAX)
+    {
+        cout << "Numero máximo de pessoas atingido";
     }
     else
     {
@@ -71,7 +80,7 @@ void cadastrarPessoa()
     }
 }
 
-void listarPessoa()
+void Pessoa::listarPessoa()
 {
     ifstream file("pessoas.dat");
     string linha;
@@ -80,7 +89,7 @@ void listarPessoa()
         cout << "Lista de pessoas cadastradas:" << endl;
         while (getline(file, linha)) // le cada linha
         {
-              // Encontra a posição dos ';'
+            // Encontra a posição dos ';'
             size_t pos1 = linha.find(';');
             size_t pos2 = linha.find(';', pos1 + 1);
 
@@ -97,5 +106,113 @@ void listarPessoa()
     else
     {
         cout << "Erro ao abrir arquivo!";
+    }
+}
+
+void Pessoa::nomePesquisa(string nomePesquisa)
+{
+    ifstream file("pessoas.dat");
+    string linha;
+    if (file.is_open())
+    {
+        cout << "Pesquisa nome:" << endl;
+        getline(cin, nomePesquisa);
+
+        while (getline(file, linha)) // le cada linha
+        {
+            // Encontra a posição dos ';'
+            size_t pos1 = linha.find(';');
+            size_t pos2 = linha.find(';', pos1 + 1);
+
+            // Separa os campos usando as posições dos ';'
+            string nome = linha.substr(0, pos1);                  // Do início até o primeiro ';'
+            string cpf = linha.substr(pos1 + 1, pos2 - pos1 - 1); // Entre os dois ';'
+            string data = linha.substr(pos2 + 1);                 // Do segundo ';' até o fim
+
+            if (nome == nomePesquisa)
+            {
+                cout << "Nome: " << nome << " | CPF: " << cpf << " | Data de nascimento: " << data << endl;
+            }
+        }
+        file.close();
+    }
+    else
+    {
+        cout << "Erro ao abiri arquivo" << endl;
+    }
+}
+
+void Pessoa::cpfPesquisa(string cpfPesquisa)
+{
+    ifstream file("pessoas.dat");
+    string linha;
+    if (file.is_open())
+    {
+        while (getline(file, linha)) // le cada linha
+        {
+            // Encontra a posição dos ';'
+            size_t pos1 = linha.find(';');
+            size_t pos2 = linha.find(';', pos1 + 1);
+
+            // Separa os campos usando as posições dos ';'
+            string nome = linha.substr(0, pos1);                  // Do início até o primeiro ';'
+            string cpf = linha.substr(pos1 + 1, pos2 - pos1 - 1); // Entre os dois ';'
+            string data = linha.substr(pos2 + 1);                 // Do segundo ';' até o fim
+
+            if (cpf == cpfPesquisa)
+            {
+                cout << "Nome: " << nome << " | CPF: " << cpf << " | Data de nascimento: " << data << endl;
+            }
+            if (cpf != cpfPesquisa)
+            {
+                cout << "Pessoa não cadastrada";
+            }
+        }
+        file.close();
+    }
+    else
+    {
+        cout << "Erro ao abiri arquivo" << endl;
+    }
+}
+
+void Pessoa::excluirPessoa(string cpfPesquisa)
+{
+    ifstream file("pessoas.dat");
+    ofstream fileNovo("pessoasNovo.dat");
+    bool achou = false;
+    string linha;
+
+    if (file.is_open() && fileNovo.is_open())
+    {
+        while (getline(file, linha))
+        {
+            size_t pos1 = linha.find(';');
+            size_t pos2 = linha.find(';', pos1 + 1);
+            string cpf = linha.substr(pos1 + 1, pos2 - pos1 - 1);
+
+            if (cpf != cpfPesquisa)
+            {
+                fileNovo << linha << endl; // Copia quem NÃO é o CPF buscado
+            }
+            else achou = true;
+        }
+        file.close();
+        fileNovo.close();
+        remove("pessoas.dat");
+        rename("pessoasNovo.dat", "pessoas.dat");
+        if (achou)
+        {
+            cout << "Pessoa excluida com sucesso!";
+            TAM--;
+        }
+        else
+        {
+            cout << "Pessoa não encontrada";
+        }
+    }
+    else
+    {
+        cout << "Erro ao abrir arquivo!" << endl;
     }
 }

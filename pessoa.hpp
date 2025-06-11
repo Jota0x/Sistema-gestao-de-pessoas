@@ -1,3 +1,7 @@
+#ifndef PESSOA_HPP
+#define PESSOA_HPP
+class Data;
+
 #include <iostream>
 using namespace std;
 
@@ -14,7 +18,7 @@ public:
     // construtor com nenhum parâmetro
     Pessoa()
     {
-        setPessoa(NULL, NULL, NULL);
+        setPessoa("", Data(), "");
     }
     // cosntrutor com 4 parâmetros
     Pessoa(string nome, int dia, int mes, int ano)
@@ -25,7 +29,7 @@ public:
     // cosntrutor com um único parametro
     Pessoa(string nome)
     {
-        setPessoa(nome, NULL, "");
+        setPessoa(nome,Data(),"");
     }
 
     void setPessoa(string nome, Data nascimento, string cpf)
@@ -35,13 +39,25 @@ public:
         this->cpf = cpf;
     }
 
-    void getNome(string nome);
-    Data getIdade(Data nascimento);
+    string  getNome(string nome);
+    Data getIdade(int ano);
     string getCpf(string cpf);
-    void leiaPessoa();
-    void escreverPessoa(string nome, Data nascimento,int cpf);
+    void leiaPessoa(string nome);
+    void escreverPessoa(string nome, Data nascimento, string cpf);
     void cadastrarPessoa();
     void listarPessoa();
+    void nomePesquisa(string nomePesquisa);
+    void cpfPesquisa(string cpfPesquisa);
+    void excluirPessoa(string cpfPesquisa);
 
-    
 };
+
+class Aluno : public Pessoa
+{
+};
+
+class Professor : public Pessoa
+{
+};
+
+#endif

@@ -1,8 +1,8 @@
 #include <iostream>
-using namespace std;
-
 #include "data.hpp"
 #include "pessoa.hpp"
+using namespace std;
+
 
 
 const int MAX = 100; // Constante global: tamanho físico do arranjo de pessoas
@@ -34,24 +34,44 @@ int main()
 
         case 2:
             pessoa.listarPessoa();
-        
+
             break;
 
         case 3:
+        {
+
+            string nomePesquisa;
+            cout << "Digite nome para pesquisar: ";
+            getline(cin, nomePesquisa);
+            pessoa.nomePesquisa(nomePesquisa);
+
             break;
+        }
         case 4:
+        {
+
+            string cpfPesquisa;
+            cout << "Digite CPF para pesquisa:";
+            getline(cin, cpfPesquisa);
+            pessoa.cpfPesquisa(cpfPesquisa);
 
             break;
-        case 5:
+        }
+        case 5:{
+            string cpfPesquisa;
+            cout << "Digite CPF para pesquisa [Excluir]:";
+            getline(cin, cpfPesquisa);
+            pessoa.excluirPessoa(cpfPesquisa);
 
             break;
+        }
+            
         case 6:
 
             break;
         case 0:
 
             break;
-
 
         default:
             break;

@@ -1,24 +1,37 @@
 #include <iostream>
+#include "data.hpp"
+#include "pessoa.hpp"
 using namespace std;
 
-#include "data.hpp"
+extern const int MAX; // Constante global: tamanho físico do arranjo de pessoas
+extern int TAM;
 
-int getDia(int dia)
+
+int Data::getDia()
 {
-    return dia;
+    return this->dia;
 }
 
-int getMes(int mes)
+int Data::getMes()
 {
-    return mes;
+    return this->mes;
 }
 
-int getAno(int ano)
+int Data::getAno()
 {
-    return ano;
+    return this->ano;
 }
 
-bool dataValida(int dia, int mes, int ano)
+bool Data::ehBissexto(int ano)
+{
+    if (ano % 4 == 0 && ano % 100 != 0 || (ano % 400 == 0))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Data::dataValida(int dia, int mes, int ano)
 {
     if (dia >= 1 && dia <= 31 && mes >= 1 && mes <= 12 && ano >= 0)
     {
@@ -34,16 +47,7 @@ bool dataValida(int dia, int mes, int ano)
     return false;
 }
 
-bool ehBissexto(int ano)
-{
-    if (ano % 4 == 0 && ano % 100 != 0 || (ano % 400 == 0))
-    {
-        return true;
-    }
-    return false;
-}
-
-string mesExtenso(int mes)
+string Data::mesExtenso(int mes)
 {
     string mesExtenso[] = {"Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
     if (mes >= 1 && mes <= 12)
@@ -53,7 +57,7 @@ string mesExtenso(int mes)
     return "Mes invalido";
 }
 
-int diaMes(int dia, int mes, int ano)
+int Data::diaMes(int dia, int mes, int ano)
 {
     int diaMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
@@ -65,7 +69,7 @@ int diaMes(int dia, int mes, int ano)
     return diaMes[dia - 1];
 }
 
-void lerData()
+void Data::lerData()
 {
     int d, m, a;
     cout << "Dia: " << endl;
@@ -81,7 +85,7 @@ void lerData()
     }
 }
 
-void escreveData(int dia, int mes,int ano)
+void Data::escreveData(int dia, int mes,int ano)
 {
     cout << dia << "/" << mes << "/" << ano;
 }

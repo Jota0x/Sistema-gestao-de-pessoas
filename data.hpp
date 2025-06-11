@@ -1,3 +1,7 @@
+#ifndef DATA_HPP
+#define DATA_HPP
+
+
 #include <iostream>
 using namespace std;
 
@@ -35,10 +39,12 @@ public:
     int getDia();
     int getMes();
     int getAno();
-    bool dataValida();
+    bool dataValida(int dia,int mes,int ano);
+    string mesExtenso(int mes);
     bool ehBissexto(int ano);
-    string mesExtenso();
-    int diaMes();
+    int diaMes(int dia,int mes,int ano);
     void lerData();
-    void escreveData();
+    void escreveData(int dia,int mes,int ano);
 };
+
+#endif
